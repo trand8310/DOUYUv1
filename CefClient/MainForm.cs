@@ -53,6 +53,48 @@ namespace CefClient
 
         }
 
+        protected override void SetVisibleCore(bool value)
+        {
+            if (_isHiddenMode && !DesignMode)
+            {
+                value = false;
+            }
+
+            base.SetVisibleCore(value);
+        }
+
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            if (_isHiddenMode)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    if (!IsDisposed)
+                    {
+                        Hide();
+                    }
+                }));
+            }
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            if (_isHiddenMode)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    if (!IsDisposed)
+                    {
+                        Hide();
+                    }
+                }));
+            }
+        }
 
         protected override void OnShown(EventArgs e)
         {
