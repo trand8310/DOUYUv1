@@ -450,7 +450,7 @@ namespace MainClient
 
 
             var cefConsumerId = consumerId.ToString();
-            await using var session = new CefClientSession(cefExePath, TimeSpan.FromSeconds(15), cefConsumerId);
+            await using var session = new CefClientSession(cefExePath, TimeSpan.FromSeconds(15), cefConsumerId, _appSettings.IsHiddenMode);
 
             session.OnLog += message =>
             {

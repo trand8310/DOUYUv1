@@ -21,8 +21,11 @@ namespace CefClient
         private readonly FlowLayoutPanel _hostPanel;
         private readonly ConcurrentDictionary<string, BrowserSlot> _slots = new();
         private readonly ConcurrentDictionary<string, SemaphoreSlim> _createLocks = new();
-        public MainForm()
+        private readonly bool _isHiddenMode;
+
+        public MainForm(bool isHiddenMode = false)
         {
+            _isHiddenMode = isHiddenMode;
             InitializeComponent();
             _hostPanel = new FlowLayoutPanel
             {
@@ -38,6 +41,16 @@ namespace CefClient
         private void MainForm_Load(object sender, EventArgs e)
         {
 
+        }
+
+        protected override void SetVisibleCore(bool value)
+        {
+            if (_isHiddenMode && !DesignMode)
+            {
+                value = false;
+            }
+
+            base.SetVisibleCore(value);
         }
 
 
