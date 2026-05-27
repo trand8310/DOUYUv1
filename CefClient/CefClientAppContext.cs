@@ -36,14 +36,24 @@
                 if (Interlocked.Exchange(ref _started, 1) != 0)
                     return;
 
-                // 等消息循环起来后再启动
-                _mainForm.Shown += MainForm_Shown;
+                // 等消息循环起来后再启动（HiddenMode 下可能不会触发 Shown）
+                if (_mainForm.IsHandleCreated)
+                {
+                    _mainForm.BeginInvoke((Action)StartPipeLoop);
+                    return;
+                }
+
+                _mainForm.HandleCreated += MainForm_HandleCreated;
             }
 
-            private void MainForm_Shown(object? sender, EventArgs e)
+            private void MainForm_HandleCreated(object? sender, EventArgs e)
             {
-                _mainForm.Shown -= MainForm_Shown;
+                _mainForm.HandleCreated -= MainForm_HandleCreated;
+                _mainForm.BeginInvoke((Action)StartPipeLoop);
+            }
 
+            private void StartPipeLoop()
+            {
                 _ = Task.Run(async () =>
                 {
                     try
