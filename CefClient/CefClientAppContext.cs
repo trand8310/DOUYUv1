@@ -36,21 +36,10 @@
                 if (Interlocked.Exchange(ref _started, 1) != 0)
                     return;
 
-                // 等消息循环起来后再启动（HiddenMode 下可能不会触发 Shown）
-                if (_mainForm.IsHandleCreated)
-                {
-                    _mainForm.BeginInvoke((Action)StartPipeLoop);
-                    return;
-                }
-
-                _mainForm.HandleCreated += MainForm_HandleCreated;
+                // 管道通信不依赖 MainForm 可见性/句柄，直接启动
+                StartPipeLoop();
             }
 
-            private void MainForm_HandleCreated(object? sender, EventArgs e)
-            {
-                _mainForm.HandleCreated -= MainForm_HandleCreated;
-                _mainForm.BeginInvoke((Action)StartPipeLoop);
-            }
 
             private void StartPipeLoop()
             {

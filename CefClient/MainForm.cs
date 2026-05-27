@@ -96,6 +96,22 @@ namespace CefClient
             }
         }
 
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            if (_isHiddenMode)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    if (!IsDisposed)
+                    {
+                        Hide();
+                    }
+                }));
+            }
+        }
+
         public async Task<bool> CreateBrowserAsync(
             string taskId,
             string browserId,
