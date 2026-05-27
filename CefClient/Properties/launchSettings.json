@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CefClient": {
+      "commandName": "Project",
+      "commandLineArgs": "--pipe-name=cefclient_pipe_20156_df6c2077fbf44c5fabe758cb5c86c88d --consumer-id=0"
+    }
+  }
+}
