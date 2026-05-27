@@ -21,6 +21,7 @@ namespace MainClient.Ipc
         private readonly string _pipeName;
         private readonly string? _consumerId;
         private readonly TimeSpan _startTimeout;
+        private readonly bool _isHiddenMode;
         private readonly CancellationTokenSource _disposeCts = new();
         private readonly SemaphoreSlim _writeLock = new(1, 1);
 
@@ -61,11 +62,13 @@ namespace MainClient.Ipc
         public CefClientSession(
             string exePath,
             TimeSpan? startTimeout = null,
-            string? consumerId = null)
+            string? consumerId = null,
+            bool isHiddenMode = false)
         {
             _exePath = exePath;
             _consumerId = string.IsNullOrWhiteSpace(consumerId) ? null : consumerId;
             _startTimeout = startTimeout ?? TimeSpan.FromSeconds(10);
+            _isHiddenMode = isHiddenMode;
             _pipeName = $"cefclient_pipe_{Environment.ProcessId}_{Guid.NewGuid():N}";
 
             _pipeServer = new NamedPipeServerStream(
@@ -92,6 +95,8 @@ namespace MainClient.Ipc
             psi.ArgumentList.Add($"--pipe-name={_pipeName}");
             if (!string.IsNullOrWhiteSpace(_consumerId))
                 psi.ArgumentList.Add($"--consumer-id={_consumerId}");
+
+            psi.ArgumentList.Add($"--hidden-mode={_isHiddenMode}");
 
             var process = new Process
             {

@@ -36,14 +36,13 @@
                 if (Interlocked.Exchange(ref _started, 1) != 0)
                     return;
 
-                // 等消息循环起来后再启动
-                _mainForm.Shown += MainForm_Shown;
+                // 管道通信不依赖 MainForm 可见性/句柄，直接启动
+                StartPipeLoop();
             }
 
-            private void MainForm_Shown(object? sender, EventArgs e)
-            {
-                _mainForm.Shown -= MainForm_Shown;
 
+            private void StartPipeLoop()
+            {
                 _ = Task.Run(async () =>
                 {
                     try

@@ -19,6 +19,12 @@ namespace CefClient
             .FirstOrDefault(x => x.StartsWith("--consumer-id=", StringComparison.OrdinalIgnoreCase))
             ?.Substring("--consumer-id=".Length);
 
+            var isHiddenModeArg = args
+            .FirstOrDefault(x => x.StartsWith("--hidden-mode=", StringComparison.OrdinalIgnoreCase))
+            ?.Substring("--hidden-mode=".Length);
+
+            var isHiddenMode = bool.TryParse(isHiddenModeArg, out var hiddenMode) && hiddenMode;
+
             if (!string.IsNullOrWhiteSpace(consumerId))
             {
                 CefCachePaths.RootCachePath = CefCachePaths.GetConsumerRootCachePath(consumerId);
@@ -75,7 +81,7 @@ namespace CefClient
                 }
             };
 
-            var mainForm = new MainForm();
+            var mainForm = new MainForm(isHiddenMode);
             // 带管道参数：由主进程调度
             if (!string.IsNullOrWhiteSpace(pipeName))
             {
