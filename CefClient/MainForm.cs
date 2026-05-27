@@ -21,9 +21,22 @@ namespace CefClient
         private readonly FlowLayoutPanel _hostPanel;
         private readonly ConcurrentDictionary<string, BrowserSlot> _slots = new();
         private readonly ConcurrentDictionary<string, SemaphoreSlim> _createLocks = new();
-        public MainForm()
+        private readonly bool _isHiddenMode;
+
+        public MainForm(bool isHiddenMode = false)
         {
+            _isHiddenMode = isHiddenMode;
             InitializeComponent();
+
+            if (_isHiddenMode)
+            {
+                ShowInTaskbar = false;
+                WindowState = FormWindowState.Minimized;
+                Opacity = 0;
+                FormBorderStyle = FormBorderStyle.None;
+                StartPosition = FormStartPosition.Manual;
+                Location = new Point(-32000, -32000);
+            }
             _hostPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -40,6 +53,22 @@ namespace CefClient
 
         }
 
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            if (_isHiddenMode)
+            {
+                BeginInvoke(new Action(() =>
+                {
+                    if (!IsDisposed)
+                    {
+                        Hide();
+                    }
+                }));
+            }
+        }
 
         public async Task<bool> CreateBrowserAsync(
             string taskId,
