@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefClient", "CefClient\CefC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainClient", "MainClient\MainClient.csproj", "{FFE8A437-251E-45EE-AE34-D05AD13CF8E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CefClient.OffScreen", "CefClient.OffScreen\CefClient.OffScreen.csproj", "{3A3FE700-3BDF-C39C-DB21-4472FBEEB331}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{FFE8A437-251E-45EE-AE34-D05AD13CF8E9}.Release|Any CPU.Build.0 = Release|x64
 		{FFE8A437-251E-45EE-AE34-D05AD13CF8E9}.Release|x64.ActiveCfg = Release|x64
 		{FFE8A437-251E-45EE-AE34-D05AD13CF8E9}.Release|x64.Build.0 = Release|x64
+		{3A3FE700-3BDF-C39C-DB21-4472FBEEB331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A3FE700-3BDF-C39C-DB21-4472FBEEB331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A3FE700-3BDF-C39C-DB21-4472FBEEB331}.Debug|x64.ActiveCfg = Debug|x64
+		{3A3FE700-3BDF-C39C-DB21-4472FBEEB331}.Debug|x64.Build.0 = Debug|x64
+		{3A3FE700-3BDF-C39C-DB21-4472FBEEB331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A3FE700-3BDF-C39C-DB21-4472FBEEB331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A3FE700-3BDF-C39C-DB21-4472FBEEB331}.Release|x64.ActiveCfg = Release|x64
+		{3A3FE700-3BDF-C39C-DB21-4472FBEEB331}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -26,6 +26,134 @@ namespace MainClient
         private readonly IpHelper _ipHelper;
         private readonly ProxyTester _ipTester;
 
+        #region osr
+        private readonly ConcurrentQueue<string> _osrScreenshotQueue = new();
+        private readonly ConcurrentDictionary<string, OsrPreviewItem> _osrPendingScreenshots = new(StringComparer.OrdinalIgnoreCase);
+        private readonly ConcurrentDictionary<string, byte> _osrQueuedScreenshotKeys = new(StringComparer.OrdinalIgnoreCase);
+        private readonly System.Windows.Forms.Timer _osrScreenshotTimer;
+        private OsrPreviewForm? _osrScreenshotPreviewForm;
+        private int _osrScreenshotQueueCount;
+        private int _osrScreenshotTimerStartPending;
+        private const int OsrScreenshotsPerTick = 2;
+        private const int OsrScreenshotQueueIntervalMs = 100;
+
+        private readonly record struct OsrPreviewItem(
+            string PreviewKey,
+            string ConsumerId,
+            string BrowserId,
+            string ScreenshotBase64);
+
+        private Task ShowOsrScreenshotAsync(PipeEnvelope screenshot, int consumerId)
+        {
+            if (_appSettings.IsHiddenMode || !_appSettings.IsOsrMode)
+                return Task.CompletedTask;
+
+            var browserId = screenshot.BrowserId;
+            var base64 = screenshot.Data?["base64"]?.GetValue<string>();
+            if (string.IsNullOrWhiteSpace(browserId) || string.IsNullOrWhiteSpace(base64))
+                return Task.CompletedTask;
+
+            var consumerIdText = consumerId.ToString();
+            var previewKey = $"consumer_{consumerIdText}";
+            EnqueueOrUpdateOsrScreenshot(new OsrPreviewItem(
+                previewKey,
+                consumerIdText,
+                browserId,
+                base64));
+
+            ScheduleOsrScreenshotDrain();
+            return Task.CompletedTask;
+        }
+
+        private void EnqueueOrUpdateOsrScreenshot(OsrPreviewItem item)
+        {
+            _osrPendingScreenshots.AddOrUpdate(item.PreviewKey, item, (_, _) => item);
+
+            if (!_osrQueuedScreenshotKeys.TryAdd(item.PreviewKey, 0))
+                return;
+
+            _osrScreenshotQueue.Enqueue(item.PreviewKey);
+            Interlocked.Increment(ref _osrScreenshotQueueCount);
+        }
+
+        private void ScheduleOsrScreenshotDrain()
+        {
+            if (IsDisposed || Disposing)
+                return;
+
+            if (Interlocked.Exchange(ref _osrScreenshotTimerStartPending, 1) == 1)
+                return;
+
+            void StartTimerOnUiThread()
+            {
+                Interlocked.Exchange(ref _osrScreenshotTimerStartPending, 0);
+
+                if (IsDisposed || Disposing || Volatile.Read(ref _osrScreenshotQueueCount) <= 0)
+                    return;
+
+                if (!_osrScreenshotTimer.Enabled)
+                    _osrScreenshotTimer.Start();
+            }
+
+            try
+            {
+                if (InvokeRequired)
+                    BeginInvoke((Action)StartTimerOnUiThread);
+                else
+                    StartTimerOnUiThread();
+            }
+            catch
+            {
+                Interlocked.Exchange(ref _osrScreenshotTimerStartPending, 0);
+            }
+        }
+
+        private void DrainOsrScreenshotQueue()
+        {
+            if (_appSettings.IsHiddenMode || !_appSettings.IsOsrMode)
+            {
+                ClearOsrScreenshotQueue();
+                _osrScreenshotTimer.Stop();
+                return;
+            }
+
+            if (_osrScreenshotPreviewForm == null || _osrScreenshotPreviewForm.IsDisposed)
+            {
+                _osrScreenshotPreviewForm = new OsrPreviewForm();
+                _osrScreenshotPreviewForm.FormClosed += (_, _) => _osrScreenshotPreviewForm = null;
+            }
+
+            for (var i = 0; i < OsrScreenshotsPerTick; i++)
+            {
+                if (!_osrScreenshotQueue.TryDequeue(out var previewKey))
+                    break;
+
+                _osrQueuedScreenshotKeys.TryRemove(previewKey, out _);
+                Interlocked.Decrement(ref _osrScreenshotQueueCount);
+
+                if (!_osrPendingScreenshots.TryRemove(previewKey, out var item))
+                    continue;
+
+                _osrScreenshotPreviewForm.ShowScreenshot(item.ConsumerId, item.BrowserId, item.ScreenshotBase64);
+            }
+
+            if (Volatile.Read(ref _osrScreenshotQueueCount) <= 0)
+                _osrScreenshotTimer.Stop();
+        }
+
+        private void ClearOsrScreenshotQueue()
+        {
+            while (_osrScreenshotQueue.TryDequeue(out _))
+            {
+            }
+
+            Interlocked.Exchange(ref _osrScreenshotQueueCount, 0);
+            _osrPendingScreenshots.Clear();
+            _osrQueuedScreenshotKeys.Clear();
+        }
+
+        #endregion
+
 
 
         #region 任务调度
@@ -160,6 +288,7 @@ namespace MainClient
             checkBox_IsDetailLog.Checked = _appSettings.IsDetailLog;
             checkBox_IsRealIp.Checked = _appSettings.IsRealIp;
             checkBox_IsCheckIp.Checked = _appSettings.IsCheckIp;
+            checkBox_IsOsrMode.Checked = _appSettings.IsOsrMode;
         }
         private static object lock_config = new object();
         private void UpdateAppSetting()
@@ -182,6 +311,7 @@ namespace MainClient
                 _appSettings.IsDetailLog = checkBox_IsDetailLog.Checked;
                 _appSettings.IsRealIp = checkBox_IsRealIp.Checked;
                 _appSettings.IsCheckIp = checkBox_IsCheckIp.Checked;
+                _appSettings.IsOsrMode = checkBox_IsOsrMode.Checked;
 
                 UserConfigService.Save("AppSettings", _appSettings);
             }
@@ -208,6 +338,12 @@ namespace MainClient
             this._appSettings = appSettings;
             this._logger = logger;
             this._httpClientFactory = httpClientFactory;
+
+            components ??= new System.ComponentModel.Container();
+            _osrScreenshotTimer = new System.Windows.Forms.Timer(components);
+            _osrScreenshotTimer.Interval = OsrScreenshotQueueIntervalMs;
+            _osrScreenshotTimer.Tick += (_, _) => DrainOsrScreenshotQueue();
+
 
             LoadAppSetting();
             #region 数据初始化
@@ -425,32 +561,38 @@ namespace MainClient
 
 
 
+ 
+
+
 
         private async Task<bool> ExecuteTaskByCefClientAsync(
            ConsumerTaskContext ctx,
-           JsonNode rawTask,
+           JsonNode task,
            int consumerId,
            JsonNode initDev,
            CancellationToken token)
         {
             ctx.UniqueId = Guid.NewGuid().ToString("D");
-            var cefProcessFileName = "CefClient.exe";
+
+            var cefProcessDirectory = _appSettings.IsOsrMode ? "CefClient" : "CefClient";
+            var cefProcessFileName = _appSettings.IsOsrMode ? "CefClient.OffScreen.exe" : "CefClient.exe";
+
             var cefExePath = Path.Combine(
                 AppDomain.CurrentDomain.BaseDirectory,
-                "CefClient",
+                cefProcessDirectory,
                 cefProcessFileName);
 
 
             _logger.LogInformation(
-                "Use {CefProcessFileName} for taskId={TaskId}, uniqueId={UniqueId}, consumer={ConsumerId}",
+                "Use {CefProcessFileName} for taskId={TaskId}, uniqueId={UniqueId}, consumer={ConsumerId}, osrMode={IsOsrMode}",
                 cefProcessFileName,
                 ctx.TaskId,
                 ctx.UniqueId,
-                consumerId);
-
+                consumerId,
+                _appSettings.IsOsrMode);
 
             var cefConsumerId = consumerId.ToString();
-            await using var session = new CefClientSession(cefExePath, TimeSpan.FromSeconds(15), cefConsumerId, _appSettings.IsHiddenMode);
+            await using var session = new CefClientSession(cefExePath, TimeSpan.FromSeconds(15), cefConsumerId,_appSettings.IsHiddenMode);
 
             session.OnLog += message =>
             {
@@ -466,7 +608,7 @@ namespace MainClient
                     return Task.CompletedTask;
                 }
 
-                return Task.CompletedTask;
+                return ShowOsrScreenshotAsync(screenshot, consumerId);
             };
 
             session.OnBrowserStatus += status =>
@@ -630,7 +772,7 @@ namespace MainClient
             {
                 await session.StartAsync(token);
 
-                var startPayload = BuildStartPayload(ctx, rawTask);
+                var startPayload = BuildStartPayload(ctx, task);
                 await session.StartTaskAsync(ctx.UniqueId, startPayload, token);
 
                 var ipTtlSeconds = _appSettings.IpValidityDuration;
@@ -652,6 +794,79 @@ namespace MainClient
                     return stopRemainingUvByResult;
                 }
 
+                if (_appSettings.IsOsrMode)
+                {
+                    for (int uvIndex = 0; uvIndex < ctx.TotalUV; uvIndex++)
+                    {
+                        if (token.IsCancellationRequested)
+                            return false;
+
+                        string browserId = $"uv_{uvIndex + 1}";
+
+                        _aggregator.EnqueueTaskState(new AdTrafficTaskStateEvent(ctx.TaskId, AdTrafficTaskStateKind.Request, 1));
+                        try
+                        {
+                            var dev = await GetDeviceForTaskAsync(ctx.OS, ctx.TaskId, uvIndex, innerToken);
+                            if (dev == null)
+                            {
+                                _logger.LogWarning("GetDeviceForTaskAsync failed. taskId={TaskId}, uv={Uv}",
+                                    ctx.TaskId, uvIndex + 1);
+                                continue;
+                            }
+
+                            NormalizeDevice(dev, ctx.OS);
+
+                            if (!inFlightBrowsers.TryAdd(browserId, 0))
+                            {
+                                _logger.LogWarning(
+                                    "Duplicated in-flight OSR browserId. taskId={TaskId}, browserId={BrowserId}",
+                                    ctx.TaskId,
+                                    browserId);
+                                continue;
+                            }
+
+                            Interlocked.Increment(ref dispatchedUvCount);
+                            _ = StartUvTimeoutWatchdogAsync(browserId, innerToken);
+
+                            try
+                            {
+                                // OSR 模式同样只按 UVInterval 投递 runBrowser，不等待 browserResult。
+                                var uvPayload = BuildRunBrowserPayload(ctx, task, dev, consumerId, uvIndex);
+                                await session.RunBrowserNoWaitAsync(
+                                    ctx.UniqueId,
+                                    browserId,
+                                    uvPayload,
+                                    innerToken);
+                            }
+                            catch
+                            {
+                                inFlightBrowsers.TryRemove(browserId, out _);
+                                Interlocked.Decrement(ref dispatchedUvCount);
+                                throw;
+                            }
+
+                            if (uvIndex < ctx.TotalUV - 1)
+                                await Task.Delay(uvIntervalMs, innerToken);
+                        }
+                        catch (OperationCanceledException) when (token.IsCancellationRequested)
+                        {
+                            return false;
+                        }
+                        catch (OperationCanceledException) when (ipTtlCts.IsCancellationRequested)
+                        {
+                            LogWriteLine($"任务 {ctx.TaskTitle}[{ctx.TaskId}] 的 IP 总有效时长已到，停止后续 UV。");
+                            return true;
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex,
+                                "ExecuteTaskByCefClientAsync OSR uv failed. taskId={TaskId}, uv={Uv}, consumer={ConsumerId}",
+                                ctx.TaskId, uvIndex + 1, consumerId);
+                        }
+                    }
+
+                    return await WaitForDispatchedUvCompletionAsync();
+                }
 
 
                 for (int uvIndex = 0; uvIndex < ctx.TotalUV; uvIndex++)
@@ -663,7 +878,7 @@ namespace MainClient
                     _aggregator.EnqueueTaskState(new AdTrafficTaskStateEvent(ctx.TaskId, AdTrafficTaskStateKind.Request, 1));
                     try
                     {
-                        var dev = uvIndex == 0 ? initDev : await GetDeviceForTaskAsync(ctx.OS, ctx.TaskId, uvIndex, innerToken);
+                        var dev = await GetDeviceForTaskAsync(ctx.OS, ctx.TaskId, uvIndex, innerToken);
                         if (dev == null)
                         {
                             _logger.LogWarning("GetDeviceForTaskAsync failed. taskId={TaskId}, uv={Uv}",
@@ -687,7 +902,7 @@ namespace MainClient
 
                         try
                         {
-                            var uvPayload = BuildRunBrowserPayload(ctx, rawTask, dev, consumerId, uvIndex);
+                            var uvPayload = BuildRunBrowserPayload(ctx, task, dev, consumerId, uvIndex);
                             // 多 UV 只按配置间隔投递到 CefClient，不等待子进程完成 browserCreated。
                             // CefClient 的管道读取是顺序的，同一个 browserId 会先执行 createBrowser 再执行 runBrowser。
                             await session.CreateBrowserNoWaitAsync(ctx.UniqueId, browserId, uvPayload, innerToken);
@@ -746,6 +961,8 @@ namespace MainClient
                 }
             }
         }
+
+
 
 
 
@@ -828,6 +1045,7 @@ namespace MainClient
                 ["userAgent"] = ua,
                 ["isProxyMode"] = _appSettings.IsProxyMode,
                 ["proxy_server"] = ctx.ProxyServer ?? string.Empty,
+                ["isHiddenMode"] = _appSettings.IsHiddenMode,
                 ["task"] = taskObj.DeepClone(),
                 ["url"] = url,
                 ["referer"] = referer,
@@ -1352,8 +1570,6 @@ namespace MainClient
         }
         private void ConfigureRunner(UiTaskRunner runner)
         {
-            int clearTick = 0;
-
             runner.StateChanged += state =>
             {
                 this.InvokeOnUiThreadIfRequired(() =>
@@ -1388,7 +1604,15 @@ namespace MainClient
                     var totalStats = _aggregator.GetHostTaskStats();
                     this.InvokeOnUiThreadIfRequired(() =>
                     {
-                        //label_request.Text = $"提交数量:{totalStats.Request}";
+                        label_request.Text = $"请求数量:{totalStats.Request}";
+                        label_start.Text = $"提交数量:{totalStats.Start}";
+                        label_dsp.Text = $"曝光数量:{totalStats.DSP}";
+                        label_click.Text = $"点击数量:{totalStats.Clickthrough}";
+
+
+                        //label_commit.Text = $"提交数量:{totalStats.Commit}";
+
+
                         //label_start.Text = $"执行数量:{totalStats.Start}";
                         //label_dsp.Text = $"曝光数量:{totalStats.DSP}";
 
@@ -1400,7 +1624,7 @@ namespace MainClient
                         //toolStripStatusLabel4.Text = $"执行总量：{QTPTotalStartCount + totalStats.Start}";
                         //toolStripStatusLabel5.Text = $"曝光总量：{QTPTotalDspCount + totalStats.DSP}";
                         //toolStripStatusLabel6.Text = $"点击总量：{QTPTotalClickthroughCount + totalStats.Clickthrough}";
-                        label7.Text = $"运行时长:{elapsed:hh\\:mm\\:ss}";
+                        label_time.Text = $"运行时长:{elapsed:hh\\:mm\\:ss}";
                     });
 
                     await Task.CompletedTask;
@@ -1413,9 +1637,17 @@ namespace MainClient
             );
         }
 
-
+        private float dpiScale = 1.0f;
         private async void btnStartStop_Click(object sender, EventArgs e)
         {
+            //using (var g = this.CreateGraphics())
+            //{
+            //    dpiScale = g.DpiX / 96f;
+            //}
+           // int controlWidth = (int)Math.Ceiling(devProfile.ViewportWidth * dpiScale);
+           // int controlHeight = (int)Math.Ceiling(devProfile.ViewportHeight * dpiScale);
+
+
             if (!btnStartStop.Enabled)
                 return;
 

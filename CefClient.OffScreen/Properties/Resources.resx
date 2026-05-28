@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="fsfindv3" xml:space="preserve">
+    <value>[1080,600,0,0,"document.querySelectorAll(\"iframe\")[{selector}]",0]</value>
+  </data>
+  <data name="item_js" xml:space="preserve">
+    <value>(() =&gt; {
+alis = document.querySelectorAll(".image-box.clickable");
+i=Math.floor(Math.random()*Math.floor(alis.length-1));
+target=alis[i];
+target.scrollIntoView();
+width = target.offsetWidth;
+height = target.offsetHeight;
+position = target.getBoundingClientRect();
+return [position.left,position.top,width,height,"document.querySelectorAll(\".image-box.clickable\")[{selector}]",i]
+})();</value>
+  </data>
+  <data name="js" xml:space="preserve">
+    <value>Object.defineProperty(window.screen,"width",{get:function(){return 360;}});
+Object.defineProperty(window.screen,"height",{get:function(){return 640;}});
+Object.defineProperty(window.screen,"availHeight",{get:function(){return 360;}});
+Object.defineProperty(window.screen,"availWidth",{get:function(){return 640;}});</value>
+  </data>
+  <data name="JS_ARGS" xml:space="preserve">
+    <value>{
+  "task": {
+    "huichuan": "on",
+    "abl": 80,
+    "abln": 0,
+    "yys": "",
+    "yys_dx": 0,
+    "yys_lt": 0,
+    "yys_yd": 0,
+    "yysn": 0,
+    "id": 39963,
+    "admin": "admin",
+    "cef": 3,
+    "title": "瑞士航空点击_测试",
+    "type": "刷UV",
+    "client": 1,
+    "referer": "https://et.swiss.com/ai.aspx?extProvId=379&amp;extProvApi=lx-cn-mid&amp;extPu=Mafengwo&amp;extLi=YR_2025-09::CL_LHG::BR_SWISS::MK_CN::CN_2025-CN-LX-Mid-Funnel::CT_MID::BK_MidFunnel::CID_ND&amp;extCr=Childhood_Dreams&amp;extPm=LG_ZH::EV_mApp::CH_DIS::TG_MUL::MB_CPM::AM_Mafengwo::PB_App-homepage-feeds::CF_Childhood-Dreams::PID_ND",
+    "url": "https://et.swiss.com/cl.aspx?extProvId=379&amp;extProvApi=lx-cn-mid&amp;extPu=Mafengwo&amp;extLi=YR_2025-09::CL_LHG::BR_SWISS::MK_CN::CN_2025-CN-LX-Mid-Funnel::CT_MID::BK_MidFunnel::CID_ND&amp;extCr=Childhood_Dreams&amp;extPm=LG_ZH::EV_mApp::CH_DIS::TG_MUL::MB_CPM::AM_Mafengwo::PB_App-homepage-feeds::CF_Childhood-Dreams::PID_ND&amp;url=https%3A%2F%2Fwww.swissair.com%2Fcn%2Fzh%2F",
+    "url2": "",
+    "sleep": "20-25",
+    "uv": 1,
+    "pv": 1,
+    "param": "",
+    "address": "上海[2],江苏[27]:南京[337],浙江[26]:宁波[320],江苏[27]:常州[341],江苏[27]:无锡[325],浙江[26]:杭州[315],江苏[27]:苏州[326],",
+    "click_rate": 80,
+    "click_url": "",
+    "jstext": "%28%28%29%20%3D%3E%20%7B%0A%09let%20alis%20%3D%20document.querySelectorAll%28%22.image-box.clickable%22%29%3B%0A%09let%20i%3DMath.floor%28Math.random%28%29%2AMath.floor%28alis.length-1%29%29%3B%0A%09let%20target%3Dalis%5Bi%5D%3B%0A%09target.scrollIntoView%28%29%3B%0A%09let%20width%20%3D%20target.offsetWidth%3B%0A%09let%20height%20%3D%20target.offsetHeight%3B%0A%09let%20position%20%3D%20target.getBoundingClientRect%28%29%3B%0A%09return%20%5Bposition.left%2Cposition.top%2Cwidth%2Cheight%2C%22document.querySelectorAll%28%5C%22.image-box.clickable%5C%22%29%5B%7Bselector%7D%5D%22%2Ci%5D%0A%7D%29%28%29%3B",
+    "gdpr_js": "document.querySelector%28%22%23cm-acceptAll%22%29",
+    "all-num": 46,
+    "click-num": 15,
+    "task-all-num": 46,
+    "task-android-all-num": 0,
+    "task-android-click-num": 0,
+    "task-ios-all-num": 0,
+    "task-ios-click-num": 0,
+    "uv-sum": 0,
+    "uv-click-num": 0,
+    "uv-ios-num": 0,
+    "uv-ios-huichuan-num": 0,
+    "rclient": "1|4|"
+  },
+  "dev": {
+    "osv": "12",
+    "sw": "1280",
+    "sh": "854",
+    "make": "vivo",
+    "model": "V2217",
+    "ua": "Mozilla/5.0 (Linux; Android 9; SM-G955F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Mobile Safari/537.36",
+    "androidid": "dbabcb32605a5320",
+    "imei": "865376037787403",
+    "mac": "22:E2:22:0B:19:38",
+    "oaid": "38d4f4609a504df1b2a95fd69c8b76b47b909761a5db4047b8ea50f17af2ccf4",
+    "os": 1
+  },
+  "DisableLoadImage": false,
+  "IsProxyMode": false,
+  "IsHiddenMode": false,
+  "proxy_server": "",
+  "url": [
+    "https://et.swiss.com/cl.aspx?extProvId=379&amp;extProvApi=lx-cn-mid&amp;extPu=Mafengwo&amp;extLi=YR_2025-09::CL_LHG::BR_SWISS::MK_CN::CN_2025-CN-LX-Mid-Funnel::CT_MID::BK_MidFunnel::CID_ND&amp;extCr=Childhood_Dreams&amp;extPm=LG_ZH::EV_mApp::CH_DIS::TG_MUL::MB_CPM::AM_Mafengwo::PB_App-homepage-feeds::CF_Childhood-Dreams::PID_ND&amp;url=https%3A%2F%2Fwww.swissair.com%2Fcn%2Fzh%2F"
+  ],
+  "referer": [
+    "https://et.swiss.com/ai.aspx?extProvId=379&amp;extProvApi=lx-cn-mid&amp;extPu=Mafengwo&amp;extLi=YR_2025-09::CL_LHG::BR_SWISS::MK_CN::CN_2025-CN-LX-Mid-Funnel::CT_MID::BK_MidFunnel::CID_ND&amp;extCr=Childhood_Dreams&amp;extPm=LG_ZH::EV_mApp::CH_DIS::TG_MUL::MB_CPM::AM_Mafengwo::PB_App-homepage-feeds::CF_Childhood-Dreams::PID_ND"
+  ],
+  "click_jump": true,
+  "cacheIndex": "1_s0",
+  "onceClick": false,
+  "os": 1
+}</value>
+  </data>
+  <data name="js_find_tag" xml:space="preserve">
+    <value>alis = document.querySelectorAll(".recommendBox")
+i=Math.floor(Math.random()*Math.floor(alis.length-1));
+target=alis[i];
+target.scrollIntoView();
+width = target.offsetWidth;
+height = target.offsetHeight;
+position = target.getBoundingClientRect();
+[position.left,position.top,width,height,"a[href='{selector}']",target.parentElement.getAttribute("href")]</value>
+  </data>
+  <data name="js_find_v2" xml:space="preserve">
+    <value>[].forEach.call(document.querySelectorAll(".content_new .sement_two"), function(e) {e.style.display='none';});
+alis = document.querySelectorAll(".content_new .pc_list_item")
+i=Math.floor(Math.random()*Math.floor(alis.length-1));
+target=alis[i];
+target.scrollIntoView();
+width = target.offsetWidth;
+height = target.offsetHeight;
+position = target.getBoundingClientRect();
+[position.left,position.top,width,height,".content_new .pc_list_item:nth-child({selector})",i]</value>
+  </data>
+  <data name="js_task" xml:space="preserve">
+    <value>{
+  "huichuan": "on",
+  "abl": 80,
+  "abln": 0,
+  "yys": "",
+  "yys_dx": 0,
+  "yys_lt": 0,
+  "yys_yd": 0,
+  "yysn": 0,
+  "id": 39963,
+  "admin": "admin",
+  "cef": 3,
+  "title": "瑞士航空点击_测试",
+  "type": "刷UV",
+  "client": 1,
+  "referer": "https://et.swiss.com/ai.aspx?extProvId=379&amp;extProvApi=lx-cn-mid&amp;extPu=Mafengwo&amp;extLi=YR_2025-09::CL_LHG::BR_SWISS::MK_CN::CN_2025-CN-LX-Mid-Funnel::CT_MID::BK_MidFunnel::CID_ND&amp;extCr=Childhood_Dreams&amp;extPm=LG_ZH::EV_mApp::CH_DIS::TG_MUL::MB_CPM::AM_Mafengwo::PB_App-homepage-feeds::CF_Childhood-Dreams::PID_ND",
+  "url": "https://et.swiss.com/cl.aspx?extProvId=379&amp;extProvApi=lx-cn-mid&amp;extPu=Mafengwo&amp;extLi=YR_2025-09::CL_LHG::BR_SWISS::MK_CN::CN_2025-CN-LX-Mid-Funnel::CT_MID::BK_MidFunnel::CID_ND&amp;extCr=Childhood_Dreams&amp;extPm=LG_ZH::EV_mApp::CH_DIS::TG_MUL::MB_CPM::AM_Mafengwo::PB_App-homepage-feeds::CF_Childhood-Dreams::PID_ND&amp;url=https%3A%2F%2Fwww.swissair.com%2Fcn%2Fzh%2F",
+  "url2": "",
+  "sleep": "20-25",
+  "uv": 1,
+  "pv": 1,
+  "param": "",
+  "address": "上海[2],江苏[27]:南京[337],浙江[26]:宁波[320],江苏[27]:常州[341],江苏[27]:无锡[325],浙江[26]:杭州[315],江苏[27]:苏州[326],",
+  "click_rate": 80,
+  "click_url": "",
+  "jstext": "%28%28%29%20%3D%3E%20%7B%0A%09let%20alis%20%3D%20document.querySelectorAll%28%22.image-box.clickable%22%29%3B%0A%09let%20i%3DMath.floor%28Math.random%28%29%2AMath.floor%28alis.length-1%29%29%3B%0A%09let%20target%3Dalis%5Bi%5D%3B%0A%09target.scrollIntoView%28%29%3B%0A%09let%20width%20%3D%20target.offsetWidth%3B%0A%09let%20height%20%3D%20target.offsetHeight%3B%0A%09let%20position%20%3D%20target.getBoundingClientRect%28%29%3B%0A%09return%20%5Bposition.left%2Cposition.top%2Cwidth%2Cheight%2C%22document.querySelectorAll%28%5C%22.image-box.clickable%5C%22%29%5B%7Bselector%7D%5D%22%2Ci%5D%0A%7D%29%28%29%3B",
+  "gdpr_js": "document.querySelector%28%22%23cm-acceptAll%22%29",
+  "all-num": 45,
+  "click-num": 15,
+  "task-all-num": 45,
+  "task-android-all-num": 0,
+  "task-android-click-num": 0,
+  "task-ios-all-num": 0,
+  "task-ios-click-num": 0,
+  "uv-sum": 0,
+  "uv-click-num": 0,
+  "uv-ios-num": 0,
+  "uv-ios-huichuan-num": 0,
+  "rclient": "1|4|"
+}</value>
+  </data>
+  <data name="js_task2" xml:space="preserve">
+    <value>{
+  "huichuan": "on",
+  "abl": 80,
+  "abln": 0,
+  "yys": "",
+  "yys_dx": 0,
+  "yys_lt": 0,
+  "yys_yd": 0,
+  "yysn": 0,
+  "id": 39963,
+  "admin": "admin",
+  "cef": 3,
+  "title": "瑞士航空点击_测试",
+  "type": "刷UV",
+  "client": 1,
+  "referer": "https://et.swiss.com/ai.aspx?extProvId=379&amp;extProvApi=lx-cn-mid&amp;extPu=Mafengwo&amp;extLi=YR_2025-09::CL_LHG::BR_SWISS::MK_CN::CN_2025-CN-LX-Mid-Funnel::CT_MID::BK_MidFunnel::CID_ND&amp;extCr=Childhood_Dreams&amp;extPm=LG_ZH::EV_mApp::CH_DIS::TG_MUL::MB_CPM::AM_Mafengwo::PB_App-homepage-feeds::CF_Childhood-Dreams::PID_ND",
+  "url": "https://et.swiss.com/cl.aspx?extProvId=379&amp;extProvApi=lx-cn-mid&amp;extPu=Mafengwo&amp;extLi=YR_2025-09::CL_LHG::BR_SWISS::MK_CN::CN_2025-CN-LX-Mid-Funnel::CT_MID::BK_MidFunnel::CID_ND&amp;extCr=Childhood_Dreams&amp;extPm=LG_ZH::EV_mApp::CH_DIS::TG_MUL::MB_CPM::AM_Mafengwo::PB_App-homepage-feeds::CF_Childhood-Dreams::PID_ND&amp;url=https%3A%2F%2Fwww.swissair.com%2Fcn%2Fzh%2F",
+  "url2": "",
+  "sleep": "20-25",
+  "uv": 1,
+  "pv": 1,
+  "param": "",
+  "address": "上海[2],江苏[27]:南京[337],浙江[26]:宁波[320],江苏[27]:常州[341],江苏[27]:无锡[325],浙江[26]:杭州[315],江苏[27]:苏州[326],",
+  "click_rate": 80,
+  "click_url": "",
+  "jstext": "%28%28%29%20%3D%3E%20%7B%0A%09let%20alis%20%3D%20document.querySelectorAll%28%22.image-box.clickable%22%29%3B%0A%09let%20i%3DMath.floor%28Math.random%28%29%2AMath.floor%28alis.length-1%29%29%3B%0A%09let%20target%3Dalis%5Bi%5D%3B%0A%09target.scrollIntoView%28%29%3B%0A%09let%20width%20%3D%20target.offsetWidth%3B%0A%09let%20height%20%3D%20target.offsetHeight%3B%0A%09let%20position%20%3D%20target.getBoundingClientRect%28%29%3B%0A%09return%20%5Bposition.left%2Cposition.top%2Cwidth%2Cheight%2C%22document.querySelectorAll%28%5C%22.image-box.clickable%5C%22%29%5B%7Bselector%7D%5D%22%2Ci%5D%0A%7D%29%28%29%3B",
+  "gdpr_js": "document.querySelector%28%22%23cm-acceptAll%22%29",
+  "all-num": 45,
+  "click-num": 15,
+  "task-all-num": 45,
+  "task-android-all-num": 0,
+  "task-android-click-num": 0,
+  "task-ios-all-num": 0,
+  "task-ios-click-num": 0,
+  "uv-sum": 0,
+  "uv-click-num": 0,
+  "uv-ios-num": 0,
+  "uv-ios-huichuan-num": 0,
+  "rclient": "1|4|"
+}</value>
+  </data>
+</root>

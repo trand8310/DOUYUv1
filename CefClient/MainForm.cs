@@ -2,17 +2,8 @@
 using CefClient.Handler;
 using CefSharp;
 using CefSharp.WinForms;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 namespace CefClient
 {
@@ -27,16 +18,6 @@ namespace CefClient
         {
             _isHiddenMode = isHiddenMode;
             InitializeComponent();
-
-            if (_isHiddenMode)
-            {
-                ShowInTaskbar = false;
-                WindowState = FormWindowState.Minimized;
-                Opacity = 0;
-                FormBorderStyle = FormBorderStyle.None;
-                StartPosition = FormStartPosition.Manual;
-                Location = new Point(-32000, -32000);
-            }
             _hostPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -44,73 +25,29 @@ namespace CefClient
                 WrapContents = true,
                 FlowDirection = FlowDirection.LeftToRight,
             };
-
             Controls.Add(_hostPanel);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
+            if (this._isHiddenMode)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
+                SetVisibleCore(false);
+            }
+            else
+            {
+                this.ShowInTaskbar = true;
+            }
         }
-
         protected override void SetVisibleCore(bool value)
         {
-            if (_isHiddenMode && !DesignMode)
-            {
-                value = false;
-            }
-
             base.SetVisibleCore(value);
         }
 
-
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
-
-            if (_isHiddenMode)
-            {
-                BeginInvoke(new Action(() =>
-                {
-                    if (!IsDisposed)
-                    {
-                        Hide();
-                    }
-                }));
-            }
-        }
-
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
-
-            if (_isHiddenMode)
-            {
-                BeginInvoke(new Action(() =>
-                {
-                    if (!IsDisposed)
-                    {
-                        Hide();
-                    }
-                }));
-            }
-        }
-
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
-
-            if (_isHiddenMode)
-            {
-                BeginInvoke(new Action(() =>
-                {
-                    if (!IsDisposed)
-                    {
-                        Hide();
-                    }
-                }));
-            }
-        }
+ 
+ 
 
         public async Task<bool> CreateBrowserAsync(
             string taskId,

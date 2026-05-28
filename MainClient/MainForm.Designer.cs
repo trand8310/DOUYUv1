@@ -78,12 +78,13 @@
             label24 = new Label();
             label16 = new Label();
             numericUpDown_PageLoadTimeout = new NumericUpDown();
-            label6 = new Label();
-            label8 = new Label();
+            label_start = new Label();
+            label_click = new Label();
             groupBox2 = new GroupBox();
-            label7 = new Label();
-            label9 = new Label();
-            label5 = new Label();
+            checkBox_IsOsrMode = new CheckBox();
+            label_dsp = new Label();
+            label_time = new Label();
+            label_request = new Label();
             linkLabel1 = new LinkLabel();
             checkBox_IsDetailLog = new CheckBox();
             textBox_DevApiUrl = new TextBox();
@@ -426,12 +427,12 @@
             // 
             // groupBox4
             // 
-            groupBox4.Dock = DockStyle.Bottom;
-            groupBox4.Location = new Point(0, 398);
+            groupBox4.Dock = DockStyle.Fill;
+            groupBox4.Location = new Point(0, 369);
             groupBox4.Margin = new Padding(5, 4, 5, 4);
             groupBox4.Name = "groupBox4";
             groupBox4.Padding = new Padding(5, 4, 5, 4);
-            groupBox4.Size = new Size(1111, 418);
+            groupBox4.Size = new Size(1111, 447);
             groupBox4.TabIndex = 10;
             groupBox4.TabStop = false;
             groupBox4.Text = "日志";
@@ -600,39 +601,40 @@
             numericUpDown_PageLoadTimeout.TabIndex = 93;
             numericUpDown_PageLoadTimeout.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // label6
+            // label_start
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(618, 44);
-            label6.Margin = new Padding(5, 0, 5, 0);
-            label6.Name = "label6";
-            label6.Size = new Size(82, 20);
-            label6.TabIndex = 85;
-            label6.Text = "提交数量:0";
+            label_start.AutoSize = true;
+            label_start.Location = new Point(618, 44);
+            label_start.Margin = new Padding(5, 0, 5, 0);
+            label_start.Name = "label_start";
+            label_start.Size = new Size(82, 20);
+            label_start.TabIndex = 85;
+            label_start.Text = "提交数量:0";
             // 
-            // label8
+            // label_click
             // 
-            label8.AutoSize = true;
-            label8.Location = new Point(618, 95);
-            label8.Margin = new Padding(5, 0, 5, 0);
-            label8.Name = "label8";
-            label8.Size = new Size(82, 20);
-            label8.TabIndex = 84;
-            label8.Text = "点击数量:0";
+            label_click.AutoSize = true;
+            label_click.Location = new Point(618, 95);
+            label_click.Margin = new Padding(5, 0, 5, 0);
+            label_click.Name = "label_click";
+            label_click.Size = new Size(82, 20);
+            label_click.TabIndex = 84;
+            label_click.Text = "点击数量:0";
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(checkBox_IsOsrMode);
             groupBox2.Controls.Add(label25);
             groupBox2.Controls.Add(label27);
             groupBox2.Controls.Add(numericUpDown_IpValidityDuration);
             groupBox2.Controls.Add(label24);
             groupBox2.Controls.Add(label16);
             groupBox2.Controls.Add(numericUpDown_PageLoadTimeout);
-            groupBox2.Controls.Add(label6);
-            groupBox2.Controls.Add(label8);
-            groupBox2.Controls.Add(label7);
-            groupBox2.Controls.Add(label9);
-            groupBox2.Controls.Add(label5);
+            groupBox2.Controls.Add(label_start);
+            groupBox2.Controls.Add(label_click);
+            groupBox2.Controls.Add(label_dsp);
+            groupBox2.Controls.Add(label_time);
+            groupBox2.Controls.Add(label_request);
             groupBox2.Controls.Add(linkLabel1);
             groupBox2.Controls.Add(checkBox_IsDetailLog);
             groupBox2.Controls.Add(textBox_DevApiUrl);
@@ -677,35 +679,46 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "设置";
             // 
-            // label7
+            // checkBox_IsOsrMode
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(618, 71);
-            label7.Margin = new Padding(5, 0, 5, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(82, 20);
-            label7.TabIndex = 83;
-            label7.Text = "曝光数量:0";
+            checkBox_IsOsrMode.AutoSize = true;
+            checkBox_IsOsrMode.Location = new Point(577, 285);
+            checkBox_IsOsrMode.Margin = new Padding(5, 6, 5, 6);
+            checkBox_IsOsrMode.Name = "checkBox_IsOsrMode";
+            checkBox_IsOsrMode.Size = new Size(86, 24);
+            checkBox_IsOsrMode.TabIndex = 98;
+            checkBox_IsOsrMode.Text = "Osr模式";
+            checkBox_IsOsrMode.UseVisualStyleBackColor = true;
             // 
-            // label9
+            // label_dsp
             // 
-            label9.AutoSize = true;
-            label9.Location = new Point(618, 121);
-            label9.Margin = new Padding(5, 0, 5, 0);
-            label9.Name = "label9";
-            label9.Size = new Size(82, 20);
-            label9.TabIndex = 82;
-            label9.Text = "运行时间:0";
+            label_dsp.AutoSize = true;
+            label_dsp.Location = new Point(618, 71);
+            label_dsp.Margin = new Padding(5, 0, 5, 0);
+            label_dsp.Name = "label_dsp";
+            label_dsp.Size = new Size(82, 20);
+            label_dsp.TabIndex = 83;
+            label_dsp.Text = "曝光数量:0";
             // 
-            // label5
+            // label_time
             // 
-            label5.AutoSize = true;
-            label5.Location = new Point(618, 19);
-            label5.Margin = new Padding(5, 0, 5, 0);
-            label5.Name = "label5";
-            label5.Size = new Size(82, 20);
-            label5.TabIndex = 81;
-            label5.Text = "请求数量:0";
+            label_time.AutoSize = true;
+            label_time.Location = new Point(618, 121);
+            label_time.Margin = new Padding(5, 0, 5, 0);
+            label_time.Name = "label_time";
+            label_time.Size = new Size(82, 20);
+            label_time.TabIndex = 82;
+            label_time.Text = "运行时间:0";
+            // 
+            // label_request
+            // 
+            label_request.AutoSize = true;
+            label_request.Location = new Point(618, 19);
+            label_request.Margin = new Padding(5, 0, 5, 0);
+            label_request.Name = "label_request";
+            label_request.Size = new Size(82, 20);
+            label_request.TabIndex = 81;
+            label_request.Text = "请求数量:0";
             // 
             // linkLabel1
             // 
@@ -822,9 +835,9 @@
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
             ClientSize = new Size(1111, 842);
-            Controls.Add(groupBox2);
             Controls.Add(groupBox4);
             Controls.Add(statusStrip1);
+            Controls.Add(groupBox2);
             Margin = new Padding(5, 4, 5, 4);
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -903,12 +916,12 @@
         private Label label24;
         private Label label16;
         private NumericUpDown numericUpDown_PageLoadTimeout;
-        private Label label6;
-        private Label label8;
+        private Label label_start;
+        private Label label_click;
         private GroupBox groupBox2;
-        private Label label7;
-        private Label label9;
-        private Label label5;
+        private Label label_dsp;
+        private Label label_time;
+        private Label label_request;
         private LinkLabel linkLabel1;
         private CheckBox checkBox_IsDetailLog;
         private TextBox textBox_DevApiUrl;
@@ -921,6 +934,7 @@
         private Label label26;
         private CheckBox checkBox_IsProxyMode;
         private ToolStripStatusLabel lblStatus;
+        private CheckBox checkBox_IsOsrMode;
     }
 }
 

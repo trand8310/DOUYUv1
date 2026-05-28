@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>CefClient</RootNamespace>
+		<Platforms>AnyCPU;x86;x64</Platforms>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<BaseOutputPath>..\Build\CefClient</BaseOutputPath>
+		<OutputPath>..\Build\CefClient</OutputPath>
+		<PlatformTarget>x64</PlatformTarget>
+		<ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+	</PropertyGroup>
+
+
+	<PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">
+		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x86</RuntimeIdentifier>
+		<SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(PlatformTarget)' == 'x64'">
+		<RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+		<SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="CefSharp.OffScreen.NETCore" Version="126.2.180" />
+	</ItemGroup>
+
+	<Target Name="CefSharpAfterBuildDebug" AfterTargets="AfterBuild">
+		<CallTarget Targets="CefSharpAfterBuildDiagnostic" />
+	</Target>
+	<Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+</Project>
